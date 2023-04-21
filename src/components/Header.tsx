@@ -3,14 +3,15 @@ import Logo from './Logo';
 import { BiCart, BiPencil } from 'react-icons/bi';
 import { useEffect, useState } from 'react';
 import { login, logout, onUserStateChange } from '@/api/firebase/firebase';
-import { User } from 'firebase/auth';
 import Avatar from './Avatar';
+import { MyUser } from '@/api/firebase/types';
+import Button from './UI/Button';
 
 const Header = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<MyUser | null>(null);
 
   useEffect(() => {
-    onUserStateChange(async (user) => {
+    onUserStateChange((user) => {
       setUser(user);
     });
   }, []);
@@ -25,22 +26,14 @@ const Header = () => {
             <BiCart />
           </Link>
         )}
-        {user && (
+        {user && user.isAdmin && (
           <Link to="/products/new">
             <BiPencil />
           </Link>
         )}
-        {!user && (
-          <button onClick={login} className="px-2 rounded-lg bg-stone-300">
-            Login
-          </button>
-        )}
         {user && <Avatar user={user} />}
-        {user && (
-          <button onClick={logout} className="px-2 rounded-lg bg-stone-300">
-            Logout
-          </button>
-        )}
+        {!user && <Button text="Login" onClick={login} />}
+        {user && <Button text="Logout" onClick={logout} />}
       </nav>
     </header>
   );
