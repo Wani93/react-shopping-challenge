@@ -2,7 +2,7 @@ import { User } from 'firebase/auth';
 
 const Avatar = ({ user }: { user: User }) => {
   return (
-    <div className="flex items-center">
+    <div className="flex items-center shrink-0">
       <img
         className="rounded-full w-8 h-8 mr-1"
         src={user.photoURL || undefined}
