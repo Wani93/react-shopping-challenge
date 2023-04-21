@@ -1,20 +1,12 @@
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { BiCart, BiPencil } from 'react-icons/bi';
-import { useEffect, useState } from 'react';
-import { login, logout, onUserStateChange } from '@/api/firebase/firebase';
 import Avatar from './Avatar';
-import { MyUser } from '@/api/firebase/types';
 import Button from './UI/Button';
+import { useAuthContext } from '@/context/AuthContext';
 
 const Header = () => {
-  const [user, setUser] = useState<MyUser | null>(null);
-
-  useEffect(() => {
-    onUserStateChange((user) => {
-      setUser(user);
-    });
-  }, []);
+  const { user, login, logout } = useAuthContext();
 
   return (
     <header className="flex justify-between  p-4 text-2xl">
