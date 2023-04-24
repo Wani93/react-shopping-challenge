@@ -7,8 +7,9 @@ import {
   User,
   onAuthStateChanged,
 } from 'firebase/auth';
-import { getDatabase, ref, child, get } from 'firebase/database';
-import { MyUser } from './types';
+import { getDatabase, ref, child, get, set } from 'firebase/database';
+import { v4 as uuid } from 'uuid';
+import { MyUser, Product } from './types';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -23,11 +24,11 @@ const auth = getAuth();
 const database = getDatabase(app);
 const dbRef = ref(database);
 
-const login = async () => {
+const login = () => {
   signInWithPopup(auth, provider).catch(console.error);
 };
 
-const logout = async () => {
+const logout = () => {
   signOut(auth).catch(console.error);
 };
 
@@ -42,6 +43,16 @@ const adminUser = async (user: User): Promise<MyUser> => {
   return { ...user, isAdmin };
 };
 
+const saveProduct = async (product: Omit<Product, 'id'>) => {
+  const id = uuid();
+  set(ref(database, 'products/' + id), {
+    ...product,
+    id,
+    price: +product.price,
+    option: product.option.split(','),
+  });
+};
+
 const onUserStateChange = (callback: (user: MyUser | null) => void) => {
   onAuthStateChanged(auth, async (user) => {
     const updatedUser = user ? await adminUser(user) : null;
@@ -49,4 +60,4 @@ const onUserStateChange = (callback: (user: MyUser | null) => void) => {
   });
 };
 
-export { login, logout, onUserStateChange };
+export { login, logout, saveProduct, onUserStateChange };
