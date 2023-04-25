@@ -49,12 +49,11 @@ const saveProduct = async (product: Omit<Product, 'id'>) => {
     ...product,
     id,
     price: +product.price,
-    option: product.option.split(','),
   });
 };
 
 const getProducts = async () => {
-  return get(child(dbRef, `products`))
+  return get(child(dbRef, 'products'))
     .then((snapshot) => {
       if (snapshot.exists()) {
         return Object.values(snapshot.val()) as Product[];
