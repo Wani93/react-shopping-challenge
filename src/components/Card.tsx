@@ -1,11 +1,16 @@
 import { Product } from '@/api/firebase/types';
 import { useNavigate } from 'react-router-dom';
 
-const Card = ({ name, price, category, image, id }: Product) => {
+const Card = ({
+  product,
+  product: { name, price, category, image, id },
+}: {
+  product: Product;
+}) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/products/${id}`);
+    navigate(`products/${id}`, { state: product });
   };
 
   return (

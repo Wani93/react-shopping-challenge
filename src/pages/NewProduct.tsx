@@ -40,6 +40,10 @@ const NewProduct = () => {
       return;
     }
 
+    if (name === 'option') {
+      setProduct((prev) => ({ ...prev, option: value.split(',') }));
+    }
+
     setProduct((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -49,7 +53,10 @@ const NewProduct = () => {
     if (image) {
       setUpload(true);
       const url = await uploadFile(image);
-      await saveProduct({ ...product, image: url });
+      await saveProduct({
+        ...product,
+        image: url,
+      });
       setSuccess('✅ 성공적으로 상품이 등록되었습니다.');
       setUpload(false);
 
