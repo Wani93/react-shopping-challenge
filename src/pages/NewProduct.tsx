@@ -42,6 +42,7 @@ const NewProduct = () => {
 
     if (name === 'option') {
       setProduct((prev) => ({ ...prev, option: value.split(',') }));
+      return;
     }
 
     setProduct((prev) => ({ ...prev, [name]: value }));
