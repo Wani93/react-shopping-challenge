@@ -53,6 +53,19 @@ const saveProduct = async (product: Omit<Product, 'id'>) => {
   });
 };
 
+const getProducts = async () => {
+  return get(child(dbRef, `products`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        return Object.values(snapshot.val()) as Product[];
+      }
+      return [];
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
 const onUserStateChange = (callback: (user: MyUser | null) => void) => {
   onAuthStateChanged(auth, async (user) => {
     const updatedUser = user ? await adminUser(user) : null;
@@ -60,4 +73,4 @@ const onUserStateChange = (callback: (user: MyUser | null) => void) => {
   });
 };
 
-export { login, logout, saveProduct, onUserStateChange };
+export { login, logout, saveProduct, getProducts, onUserStateChange };
